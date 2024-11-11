@@ -12,9 +12,20 @@ export default function SignUpForm({ setToken }) {
         console.log("If you're seeing this, congratulations, you are the chosen one.");
 
         if (username.length < 8) {
-            setValidationError("Username must contain no less than 8 characters");
+            setValidationError("Username must contain no less than 8 characters.");
             return;
         }
+
+        if (password.length < 8) {
+            setValidationError("Password must contain at least 8 characters.");
+            return;
+        }
+
+        if (!/\d/.test(password)) {
+            setValidationError("Password must contain at least ONE digit.");
+            return;
+        }
+
 
         try{
             const response = await fetch("https://fsa-jwt-practice.herokuapp.com/signup",
@@ -38,7 +49,7 @@ export default function SignUpForm({ setToken }) {
     return (
         <>
             <h2>Sign Up!</h2>
-            {validationError && <p>{validationError}</p>}
+            {validationError && <p className="p">{validationError}</p>}
             {error && <p>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <label>Username: {" "}
@@ -51,7 +62,8 @@ export default function SignUpForm({ setToken }) {
                     Password: {" "}
                     <input onChange={(e) => {
                     setPassword(e.target.value)
-                }} /></label><br />
+                }} /><br />
+                </label><br />
                 <button>Submit</button>
             </form>
         </>
